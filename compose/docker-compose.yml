@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  web:
+    image: webdevops/php-apache:alpine-php7
+    ports:
+      - "4500:80"
+    volumes:
+      - /data/php/:/app
+
+    networks:
+      - skynet
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: "Senha123"
+      MYSQL_DATABASE: "db"
+    ports:
+      - "3306:3306"
+    volumes:
+      - /data/dbX:/var/lib/mysql
+
+    networks:
+      - skynet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: "Senha123"
+    ports:
+      - "8080:80"
+    volumes:
+      - /data/php/admin/uploads.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+
+    networks:
+      - skynet
+
+  adminer:
+    image: adminer
+    ports:
+      - 1212:8080
+    networks:
+      - skynet
+
+networks:
+   skynet:
+     driver: bridge
+
